@@ -2,28 +2,24 @@ name: Auto Sync Codespace to GitHub
 
 on:
   push:
-      branches:
-            - main
-              workflow_dispatch:  # Allows manual triggering
-                      workflow_run:
-                          workflows: ["Auto Sync Codespace to GitHub"]
-                              types:
-                                    - completed  # Runs after the previous job completes
+    branches:
+      - main
+  workflow_dispatch: {}
+  schedule:
+    - cron: '*/5 * * * *'
 
-                                    jobs:
-                                      sync:
-                                          runs-on: ubuntu-latest
-                                              steps:
-                                                    - name: Checkout Repository
-                                                            uses: actions/checkout@v3
-
-                                                                  - name: Configure Git
-                                                                          run: |
-                                                                                    git config --global user.name "github-actions"
-                                                                                              git config --global user.email "actions@github.com"
-
-                                                                                                    - name: Add and Commit Changes
-                                                                                                            run: |
-                                                                                                                      git add .
-                                                                                                                                git commit -m "Auto-synced from Codespaces" || exit 0
-                                                                                                                                          git push origin main
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+      - name: Commit and push changes
+        run: |
+          git add .
+          git diff --quiet || git commit -m "Auto-synced from Codespaces"
+          git push origin main
