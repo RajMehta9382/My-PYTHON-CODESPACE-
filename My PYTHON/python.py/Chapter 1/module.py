@@ -10,5 +10,5 @@ so thats it
 thats my first program
 
 """
-# SO THATS IT
+# EUREKA
 # THANKS
