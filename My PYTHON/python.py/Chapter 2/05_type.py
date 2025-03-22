@@ -1,5 +1,5 @@
 a = "31.2"
-t = type(a) # class <int>
+t = type(a) # class <str>
 print(t)
 b = float(a) # a but the type of a should be float
 print(b)
